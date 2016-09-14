@@ -41,6 +41,36 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 
+<?php
+$isImage = false;
+$isUserCreate = false;
+$isUserUpdate=false;
+$isCreateDate = false;
+$isUpdateDate = false;
+foreach ($generator->getColumnNames() as $attribute) {
+    if($attribute == 'image'){
+        $isImage = true;
+    }
+    if($attribute == 'userCreate'){
+        $isUserCreate = true;
+    }
+    if($attribute == 'userUpdate'){
+        $isUserUpdate = true;
+    }
+    if($attribute == 'createDate'){
+        $isCreateDate = true;
+    }
+    if($attribute == 'updateDate'){
+        $isUpdateDate = true;
+    }
+    
+}
+if ($isImage) {
+    $loadfile = 'loadWithFiles';
+} else {
+    $loadfile = 'load';
+}
+?>
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
  */
@@ -132,6 +162,7 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
     public function actionCreate()
     {
         $model = new <?= $modelClass ?>();
+        <?php if($isCreateDate){?>$model->createDate=$date;<?php } ?>
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', <?= $urlParams ?>]);
