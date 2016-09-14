@@ -161,7 +161,10 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
     public function actionCreate()
     {
         $model = new <?= $modelClass ?>();
-        <?php if($isCreateDate){?>$model->createDate=$date;<?php } ?>
+        $date = date("Y-m-d H:i:s");
+        <?php if($isCreateDate){?>$model->createDate = $date;<?php } ?>
+        <?php if($isUserCreate){?>$model->userCreate = Yii::$app->user->id;<?php } ?>
+        <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } ?>
 
         if ($model-><?php echo $loadfile;?>(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', <?= $urlParams ?>]);
@@ -182,6 +185,8 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
     public function actionUpdate(<?= $actionParams ?>)
     {
         $model = $this->findModel(<?= $actionParams ?>);
+        $date = date("Y-m-d H:i:s");
+        <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } ?>
 
         if ($model-><?php echo $loadfile;?>(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', <?= $urlParams ?>]);

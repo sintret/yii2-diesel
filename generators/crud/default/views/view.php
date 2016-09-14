@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= "<?= " ?>Html::encode($this->title) ?></h1>
 
     <p>
-                <?= "<?= " ?>Html::a(<?= $generator->generateString('Create') ?>, ['create'], ['class' => 'btn btn-default']) ?>
+        <?= "<?= " ?>Html::a(<?= $generator->generateString('Create') ?>, ['create'], ['class' => 'btn btn-default']) ?>
         <?= "<?= " ?>Html::a(<?= $generator->generateString('Update') ?>, ['update', <?= $urlParams ?>], ['class' => 'btn btn-default']) ?>
         <?= "<?= " ?>Html::a(<?= $generator->generateString('Delete') ?>, ['delete', <?= $urlParams ?>], [
             'class' => 'btn btn-danger',
@@ -36,119 +36,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-                <?= "<?= " ?>Html::a(<?= $generator->generateString('Print Qrcode') ?>, ['id' => 'print'], ['id' => 'print', 'class' => 'btn btn-default']) ?>
 
     </p>
+    <table class="table table-striped table-bordered detail-view">
+        <tbody>
+            <?php
 
-    <?= "<?= " ?>DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-<?php
-
-if (($tableSchema = $generator->getTableSchema()) === false) {
-    foreach ($generator->getColumnNames() as $name) {
-        
-        if($name=='image'){
-            echo "        [
-            'attribute' => 'image',
-            'format' => 'image',
-            'value' => $model->thumbnailTrue, \n"
-                    . "]\n";
-           
-        } elseif($name=='userCreate'){
-            echo "      [
-            'attribute' => 'userCreate',
-            'format' => 'html',
-            'filter' => User::dropdown(),
-            'value' => function($data) {
-                return $data->userCreateLabel;
-            },
-        ], \n";
-        } elseif($name=='userUpdate'){
-            echo "         [
-            'attribute' => 'userUpdate',
-            'format' => 'html',
-            'filter' => User::dropdown(),
-            'value' => function($data) {
-                return $data->userUpdateLabel;
-            },
-        ],  \n";
+            $num = 3;
+            $tableSchema = $generator->getTableSchema();
+            $count = count($tableSchema->columns);
+        foreach ($tableSchema->columns as $column) {
+            $format = $generator->generateColumnFormat($column);
+            $name = $column->name;
+                        
+            if($name=="image"){
+                $val = 'Html::img($model->thumbnailTrue)';
+            } else if ($name == "userCreate"){
+                $val = 'Yii::$app->util->getUserId($model->userCreate)->username';
+            } else if ($name == "userUpdate"){
+                $val = 'Yii::$app->util->getUserId($model->userUpdate)->username';
+            } else {
+                $val = '$model->'.$name;
+            }
             
-        }elseif($name=='createDate'){
-            echo "      [
-            'attribute' => 'createDate',
-            'filterType' => GridView::FILTER_DATE,
-            'format' => 'raw',
-            'width' => '170px',
-            'filterWidgetOptions' => [
-                'pluginOptions' => ['format' => 'yyyy-mm-dd']
-            ],
-        ],    \n";
-            
-        }elseif($name=='updateDate'){
-            echo "   [
-            'attribute' => 'updateDate',
-            'filterType' => GridView::FILTER_DATE,
-            'format' => 'raw',
-            'width' => '170px',
-            'filterWidgetOptions' => [
-                'pluginOptions' => ['format' => 'yyyy-mm-dd']
-            ],
-        ],";
-        }
-        
-        
-        else 
-            echo "            '" . $name . "',\n";
-        
-    }
-} else {
-    foreach ($tableSchema->columns as $column) {
-        $format = $generator->generateColumnFormat($column);
-        $name = $column->name;
-        if($name=='image'){ ?>
-            ['attribute' => 'image','format' => 'image','value' => $model->thumbnailTrue],
-        <?php } elseif($name=='userCreate'){ ?>
-             [
-                'attribute' => 'userCreate',
-                'value' => Yii::$app->util->getUserId($model->userCreate)->username,
-            ],
-        <?php } elseif($name=='userUpdate'){ ?>
-            [
-                'attribute' => 'userUpdate',
-                'value' => Yii::$app->util->getUserId($model->userUpdate)->username,
-            ],
-            
-        <?php }elseif($name=='createDate'){ ?>
-            [
-                'attribute' => 'createDate',
-                'value' => $model->createDate,
-            ],
-            
-        <?php }elseif($name=='description'){ ?>
-            'description:html',
-        <?php }elseif($name=='updateDate'){ ?>
-            [
-                'attribute' => 'updateDate',
-                'value' => $model->updateDate,
-            ],
-                
-        <?php } else 
-        
-            //echo "            '" . $format . "',\n";
-        
-            echo "            '" . $column->name . ($format === 'text' ? "" : ":" . $format) . "',\n";
-        
-    }
-}
-?>
-        ]]) ;?>
-
+            ?>
+            <?php if($num %2==1) echo "<tr>\n";?><th><?php echo $name;?></th><td><?= "<?= " ?><?php echo $val ; ?>?></td><?php echo "\n";?><?php if($num %2==0 || $num == ($count+2)) echo "</tr> \n";?>
+        <?php $num++;}?>
+        </tbody>
+    </table>
+    <p>&nbsp;</p>
 </div>
-
-<img id="imgqr" style="display: none" alt="Embedded Image" src="http://sintret.com/site/qrcode?text=<?php echo "<?php ";?> echo $model->id; ?>&size=300&font-size=16&label=<?php echo "<?php ";?> echo $this->title   ; ?>" />
-<?php  echo "<?php ";?> $this->registerJs('$("#print").on("click", function(event ){
-    $("#imgqr").show();
-    event.preventDefault();
-window.print();
-});'); ?>
