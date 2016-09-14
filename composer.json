@@ -1,0 +1,34 @@
+{
+    "name": "sintret/yii2-diesel",
+    "description": "Yii2 Generator extension for Gii plugin with adminlte and base on dynagrid. parsing excel, access control with easyly",
+    "keywords": [
+        "yii2",
+        "adminlte",
+        "gii",
+        "personalize",
+        "dynagrid",
+        "import export excel",
+        "sintret"
+    ],
+    "homepage": "https://github.com/sintret/yii2-diesel",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/sintret/yii2-diesel/issues",
+        "source": "https://github.com/sintret/yii2-diesel"
+    },
+    "authors": [
+        {
+            "name": "Andy Fitria",
+            "homepage": "http://sintret.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "sintret\\diesel\\": ""
+        }
+    }
+}
