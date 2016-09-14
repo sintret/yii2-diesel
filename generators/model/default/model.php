@@ -145,7 +145,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     {
         return [
             'image' => [
-            'class' => \sintret\gii\components\CropBehavior::className(),
+            'class' => \sintret\diesel\components\CropBehavior::className(),
             'paths' => self::$imagePath . '{id}/',
             'width'=>200,
             ]
