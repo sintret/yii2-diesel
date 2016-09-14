@@ -3,14 +3,14 @@
 namespace sintret\diesel\controllers;
 
 use Yii;
-use yii\web\Controller;
+use yii\web\Controller as WebController;
 use yii\helpers\Url;
 
 
 /**
  * CController base on all access controllers dynamic
  */
-class Controller extends Controller {
+class Controller extends WebController {
 
     public $user;
 
