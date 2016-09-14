@@ -164,13 +164,14 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
         $model = new <?= $modelClass ?>();
         <?php if($isCreateDate){?>$model->createDate=$date;<?php } ?>
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model-><?php echo $loadfile;?>(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', <?= $urlParams ?>]);
-        } else {
-            return $this->render('create', [
+        }
+        
+        return $this->render('create', [
                 'model' => $model,
             ]);
-        }
+        
     }
 
     /**
@@ -183,13 +184,14 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
     {
         $model = $this->findModel(<?= $actionParams ?>);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model-><?php echo $loadfile;?>(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', <?= $urlParams ?>]);
-        } else {
-            return $this->render('update', [
+        }
+        
+        return $this->render('update', [
                 'model' => $model,
             ]);
-        }
+        
     }
 
     /**
