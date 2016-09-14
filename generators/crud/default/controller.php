@@ -43,7 +43,7 @@ use yii\filters\VerbFilter;
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
  */
-class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->baseControllerClass) . "\n" ?>
+class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?php echo "\n";?> <?php  // echo StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
     /**
      * @inheritdoc
@@ -51,6 +51,15 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@']
+                        ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -67,6 +76,23 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
     public function actionIndex()
     {
 <?php if (!empty($generator->searchModelClass)): ?>
+        $grid = 'grid-' . self::className();
+        $reset = Yii::$app->getRequest()->getQueryParam('p_reset');
+        if ($reset) {
+            \Yii::$app->session->set($grid, "");
+        } else {
+            $rememberUrl = Yii::$app->session->get($grid);
+            $current = Url::current();
+            if ($rememberUrl != $current && $rememberUrl) {
+                Yii::$app->session->set($grid, "");
+                $this->redirect($rememberUrl);
+            }
+            if (Yii::$app->getRequest()->getQueryParam('_pjax')) {
+                \Yii::$app->session->set($grid, "");
+                \Yii::$app->session->set($grid, Url::current());
+            }
+        }
+        
         $searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
