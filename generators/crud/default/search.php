@@ -65,7 +65,7 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     {
         $query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
         
-        $pagesize = sintret\diesel\models\TblDynagrid::pageMe("<?= isset($modelAlias) ? $modelAlias : $modelClass ?>");
+        $pagesize = \sintret\diesel\models\TblDynagrid::pageMe("<?= isset($modelAlias) ? $modelAlias : $modelClass ?>");
         $pagesizes = empty($pagesize) ? 50 : $pagesize;
 
         // add conditions that should always apply here
