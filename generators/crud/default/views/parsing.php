@@ -63,7 +63,7 @@ $logId = Yii::$app->session->get($log);
 
                     <?php echo "<?php\n";?>
                         echo $form->field($model, 'fileori')->widget(FileInput::classname(), [
-                            'options' => ['accept' => '.xls'],
+                            'options' => ['accept' => '.xlsx'],
                         ]);
                     <?php echo "?>\n";?>
                 </div>
