@@ -36,7 +36,7 @@ class LogUpload extends \yii\db\ActiveRecord {
         if (empty($type))
             $type = 1;
 
-        return self::$typies_label[$type] . '.xls';
+        return self::$typies_label[$type] . '.xlsx';
     }
 
     public static function typies_label_sample($type = NULL) {
