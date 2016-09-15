@@ -64,11 +64,18 @@ class <?= $searchModelClass ?> extends <?= isset($modelAlias) ? $modelAlias : $m
     public function search($params)
     {
         $query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
+        
+        $pagesize = sintret\diesel\models\TblDynagrid::pageMe("<?= isset($modelAlias) ? $modelAlias : $modelClass ?>");
+        $pagesizes = empty($pagesize) ? 50 : $pagesize;
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pagesize' => $pagesizes // in case you want a default pagesize
+            ],
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
         ]);
 
         $this->load($params);
