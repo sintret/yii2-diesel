@@ -75,6 +75,12 @@ if ($isImage) {
  */
 class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?php echo "\n";?> <?php  // echo StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
+
+    /**
+     * we are need unique name for create json file for sample controller and parsing controller
+     */
+    public $baseName = "<?= $modelClass;?>";
+    
     /**
      * @inheritdoc
      */
@@ -162,12 +168,13 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
     {
         $model = new <?= $modelClass ?>();
         $date = date("Y-m-d H:i:s");
-        <?php if($isCreateDate){?>$model->createDate = $date;<?php } ?>
-        <?php if($isUserCreate){?>$model->userCreate = Yii::$app->user->id;<?php } ?>
-        <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } ?>
+        <?php if($isCreateDate){?>$model->createDate = $date;<?php } echo "\n";?>
+        <?php if($isUserCreate){?>$model->userCreate = Yii::$app->user->id;<?php } echo "\n";?>
+        <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } echo "\n";?>
 
         if ($model-><?php echo $loadfile;?>(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', <?= $urlParams ?>]);
+            Yii::$app->session->setFlash('success', 'Well done! successfully to add data!  ');
+            return $this->redirect(['index']);
         }
         
         return $this->render('create', [
@@ -189,7 +196,8 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
         <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } ?>
 
         if ($model-><?php echo $loadfile;?>(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', <?= $urlParams ?>]);
+            Yii::$app->session->setFlash('success', 'Well done! successfully to update data!  ');
+            return $this->redirect(['index']);
         }
         
         return $this->render('update', [
@@ -207,6 +215,24 @@ class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?p
     public function actionDelete(<?= $actionParams ?>)
     {
         $this->findModel(<?= $actionParams ?>)->delete();
+        Yii::$app->session->setFlash('success', 'Well done! successfully to delete data!  ');
+
+        return $this->redirect(['index']);
+    }
+    
+    public function actionDeleteAll()
+    {
+        $success = false;
+        $explode = explode(",", Yii::$app->request->post('pk'));
+        if ($explode)
+        foreach ($explode as $v) {
+            if ($v){
+                $this->findModel($v)->delete();
+                $success = true;
+            }
+        }
+        if($success)
+            Yii::$app->session->setFlash('success', 'Well done! successfully to delete selected data!  ');
 
         return $this->redirect(['index']);
     }
