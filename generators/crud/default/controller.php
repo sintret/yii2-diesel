@@ -263,4 +263,144 @@ if (count($pks) === 1) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+    
+    public function actionSample($id = NULL) {
+        $model = new <?= $modelClass ?>;
+        $models = <?= $modelClass ?>::find()->all();
+        $not = \sintret\diesel\components\Util::excelNot();
+
+        if (empty($id)) {
+            $not = array_merge($not, ['id']);
+            $filename = \sintret\diesel\models\LogUpload::typies_label_xls(1);
+        } else {
+            $filename = \sintret\diesel\models\LogUpload::typies_label_xls(2);
+        }
+
+        foreach ($model->attributeLabels() as $k => $v) {
+            if (!in_array($k, $not)) {
+                $attributes[$k] = $v;
+            }
+        }
+
+        $array = [];
+        if ($models)
+            foreach ($models as $mod) {
+                foreach ($attributes as $k => $v) {
+                    $array[$k][] = $mod->$k;
+                }
+            }
+
+        $logSample = $this->baseName . '_' . Yii::$app->user->id;
+        
+        /*
+        / we store json file at "@webroot/xls_sample"
+        */
+        $jsonName = Yii::getAlias(\sintret\diesel\components\Util::$dirSample) . $logSample . $filename . '.json';
+
+        Yii::$app->session->set($logSample, $jsonName);
+
+        $json = [
+            'filename' => $this->baseName . '_' . $filename,
+            'attributes' => $attributes,
+            'models' => $array,
+            'info' => 'insert start data  at fourth (4) row '
+        ];
+
+       \sintret\diesel\components\Util::createJson($jsonName, json_encode($json));
+
+        return $this->redirect('parsing');
+    }
+    
+    public function actionParsing() {
+
+        /*
+         * this script line for handle a sample excel file
+         */
+        $sampleLog = $this->baseName . '_' . Yii::$app->user->id;
+
+        //echo Yii::$app->session->get($sampleLog);exit(0);
+
+        if (!empty(Yii::$app->session->get($sampleLog))) {
+            return $this->redirect(Url::to(['ajax/sample', 'sessionName' => $sampleLog]));
+        }
+        /*
+         * end a sample
+         */
+
+        $type = 1;
+        $num = 0;
+        $keys = [];
+        $fields = [];
+        $values = [];
+        $attribute = [];
+        $jsonName = '';
+        $model = new \sintret\diesel\models\LogUpload;
+
+        $date = date('Ymdhis') . Yii::$app->user->identity->id;
+
+        if (Yii::$app->request->isPost) {
+            $model->fileori = UploadedFile::getInstance($model, 'fileori');
+            $model->type = $_POST['LogUpload']['type'];
+
+            $type = $model->type;
+            $fileLabel = \sintret\diesel\models\LogUpload::$typies_parsing[$type];
+
+            if ($model->validate()) {
+                $fileOri = Yii::getAlias(LogUpload::$imagePath) . $model->fileori->baseName . '.' . $model->fileori->extension;
+                $filename = Yii::getAlias(LogUpload::$imagePath) . $date . $fileLabel . '.' . $model->fileori->extension;
+                $model->fileori->saveAs($filename);
+            }
+
+            $params = \sintret\diesel\Util::excelParsing(Yii::getAlias($filename));
+            $model->params = \yii\helpers\Json::encode($params);
+            $model->title = 'parsing ' . $this->baseName;
+            $model->fileori = $fileOri;
+            $model->filename = $filename;
+            <?php if($isCreateDate){?>$model->createDate = date('Y-m-d H:i:s');<?php } echo "\n";?>
+            <?php if($isUserCreate){?>$model->userCreate = Yii::$app->user->id;<?php } echo "\n";?>
+            <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } echo "\n";?>
+
+            if ($params)
+                foreach ($params as $k => $v) {
+                    foreach ($v as $key => $val) {
+                        if ($num == 0) {
+                            $keys[$key] = $val;
+                            $max = $key;
+                        }
+
+                        if ($num == 1) {
+                            $fields[$key] = $val;
+                        }
+
+                        if ($num >= 3) {
+                            $attribute[$keys[$key]] = $val;
+                        }
+                    }
+                    if ($num >= 3)
+                        $values[] = $attribute;
+                    $num++;
+                }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Well done! successfully to Parsing data, see log on log upload menu! Please Waiting for processing indicator if available...  ');
+
+
+                $json = [
+                    'name' => $this->baseName,
+                    'type' => $model->type,
+                    'keys' => $keys,
+                    'fields' => $fields,
+                    'datas' => $values,
+                ];
+
+                $logName = $this->baseName . '_' . Yii::$app->user->id;
+                $jsonName = Yii::getAlias(\sintret\diesel\components\Util::$dirParsing) . $logName . $fileLabel . '.json';
+                $jsonNameRelative = Yii::getAlias(\sintret\diesel\components\Util::$dirParsingRelative) . $logName . $fileLabel . '.json';
+                //create json file name
+                \app\components\Util::createJson($jsonName, json_encode($json));
+            }
+        }
+
+        return $this->render('parsing', ['model' => $model, 'logName' => $logName, 'jsonName' => $jsonNameRelative, 'type' => $type]);
+    }
 }

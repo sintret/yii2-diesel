@@ -20,10 +20,15 @@ use kartik\widgets\ActiveForm;
 use kartik\widgets\FileInput;
 use yii\helpers\Url;
 
+// sample path 
+$name = '<?= $model->tableName() ?>';
+$sampleUrl = $name . '/sample';
 
 $this->title='Parsing / Upload  <?= $model->tableName() ?> excel';
 $this->params['breadcrumbs'][] = ['label' => '<?= $model->tableName() ?>', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerJsFile(Yii::$app->request->baseUrl . '/js/parsing.js', ['depends' => [\app\assets\AppAsset::className()]]);
 
 //log variable
 $logId = Yii::$app->session->get($log);
@@ -52,25 +57,24 @@ $logId = Yii::$app->session->get($log);
 
             <div class="row">
                 <div class="col-md-10">
-                    <?php echo "<?php\n";?>
-                    echo $form->field($model, 'fileori')->widget(FileInput::classname(), [
-                        'options' => ['accept' => '.xls'],
-                    ]);
+                    <?php echo "<?php";?> 
+                        echo $form->field($model, 'type')->dropDownList(\app\models\LogUpload::$typies_parsing, ['data-name' => $name]); 
                     <?php echo "?>\n";?>
 
+                    <?php echo "<?php\n";?>
+                        echo $form->field($model, 'fileori')->widget(FileInput::classname(), [
+                            'options' => ['accept' => '.xls'],
+                        ]);
+                    <?php echo "?>\n";?>
                 </div>
-
-
             </div>
 
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
-                    <?php echo "<?=";?>
-                    Html::submitButton('Upload ', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
-                    <?php echo "?>\n";?>
+                    <?php echo "<?=";?>Html::submitButton('Upload ', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);<?php echo "?>\n";?>
                 </div>
             </div>
-            <div class="notifications" <?php if(empty($logId)){ echo 'style="display: none"';}?>>Please wait, while loading.... <img src="<?php echo \yii\helpers\Url::to('@web/img/loadingAnimation.gif');?>"></div>
+            <div class="notifications" style="display: none">Please wait, while loading.... <img src="<?php echo "<?=";?> Url::to(['img/loadingAnimation.gif']);<?php echo "?>";?>"></div>
             
             <?php echo "<?php\n";?>
             ActiveForm::end();
