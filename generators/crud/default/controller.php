@@ -399,7 +399,7 @@ if (count($pks) === 1) {
                 $jsonName = Yii::getAlias(\sintret\diesel\components\Util::$dirParsing) . $logName . $fileLabel . '.json';
                 $jsonNameRelative = Yii::getAlias(\sintret\diesel\components\Util::$dirParsingRelative) . $logName . $fileLabel . '.json';
                 //create json file name
-                \app\components\Util::createJson($jsonName, json_encode($json));
+                \sintret\diesel\components\Util::createJson($jsonName, json_encode($json));
             }
         }
 
