@@ -81,28 +81,35 @@ $logId = Yii::$app->session->get($log);
             <?php echo "?>\n";?>
 
         </div>
-
     </div>
+    
     <hr>
+    
     <div class="row">
         <div class="col-md-10">
             Format Sample : <a href="<?php echo "<?php";?> echo Yii::$app->urlManager->createUrl('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/sample');<?php echo "?>";?>"><?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.xls</a>
         </div>
+    </div>
+    
+</div>
 
+<div class="modal fade" id="modalParsing" tabindex="-1" data-url="<?php echo "<?php";?> echo $jsonName; ?>" data-ajax="<?php echo "<?php";?> echo Url::to([$name . '/parsing-log', 'type' => $type]); ?>" role="dialog" aria-labelledby="modalParsingLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-title"><?php echo "<?php";?> echo strtoupper($name);?></h4>
+                <h5 class="modal-type">Please wait, while loading.... <img src="<?php echo "<?php";?> echo Url::to(['img/loadingAnimation.gif']); ?>"></h5>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
 
-<?php echo "<?php \n";?>
-if($logId)
-    {
-$this->registerJs('$(document).ready(function(){ $.ajax({
-        type:"POST",
-        url:"' . Yii::$app->urlManager->createUrl([$route,'id'=>Yii::$app->session->get($log)]) . '",
-        beforeSend:function(){ $(".notifications").show();},
-        success:function(html){
-            $(".notifications").html(html);
-        }
-    });});');
- } 
- Yii::$app->session->set($log,NULL);
-<?php echo "?> \n";?>
+<?php
+if ($jsonName) {
+    $this->registerJsFile(Yii::$app->request->baseUrl . '/js/parsing-process.js', ['depends' => [\app\assets\AppAsset::className()]]);
+}
