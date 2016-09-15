@@ -303,7 +303,7 @@ if (count($pks) === 1) {
             'filename' => $this->baseName . '_' . $filename,
             'attributes' => $attributes,
             'models' => $array,
-            'info' => 'insert start data  at fourth (4) row '
+            'info' => 'insert start data in row no.4. Please do not remove in row no.1 & 2'
         ];
 
        \sintret\diesel\components\Util::createJson($jsonName, json_encode($json));
