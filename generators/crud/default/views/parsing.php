@@ -87,7 +87,7 @@ $logId = Yii::$app->session->get($log);
     
     <div class="row">
         <div class="col-md-10">
-            Format Sample : <a href="<?php echo "<?php";?> echo Yii::$app->urlManager->createUrl('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/sample');<?php echo "?>";?>"><?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.xls</a>
+            Format Sample : <a id="sample-parsing" data-add="<?php echo "<?php";?> echo Yii::$app->urlManager->createUrl([$sampleUrl]); ?>" data-edit="<?php echo "<?php";?> echo Yii::$app->urlManager->createUrl([$sampleUrl, 'id' => 2]); ?>" href="<?php echo "<?php";?> echo Yii::$app->urlManager->createUrl($sampleUrl); ?>"><?php echo "<?php";?> echo $name.'_'.\sintret\diesel\models\LogUpload::typies_label_sample(1); ?></a>
         </div>
     </div>
     
