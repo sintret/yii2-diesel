@@ -264,7 +264,8 @@ if (count($pks) === 1) {
         }
     }
     
-    public function actionSample($id = NULL) {
+    public function actionSample($id = NULL) 
+    {
         $model = new <?= $modelClass ?>;
         $models = <?= $modelClass ?>::find()->all();
         $not = \sintret\diesel\components\Util::excelNot();
@@ -311,7 +312,8 @@ if (count($pks) === 1) {
         return $this->redirect('parsing');
     }
     
-    public function actionParsing() {
+    public function actionParsing() 
+    {
 
         /*
          * this script line for handle a sample excel file
@@ -339,19 +341,19 @@ if (count($pks) === 1) {
         $date = date('Ymdhis') . Yii::$app->user->identity->id;
 
         if (Yii::$app->request->isPost) {
-            $model->fileori = UploadedFile::getInstance($model, 'fileori');
+            $model->fileori = \yii\web\UploadedFile::getInstance($model, 'fileori');
             $model->type = $_POST['LogUpload']['type'];
 
             $type = $model->type;
             $fileLabel = \sintret\diesel\models\LogUpload::$typies_parsing[$type];
 
             if ($model->validate()) {
-                $fileOri = Yii::getAlias(LogUpload::$imagePath) . $model->fileori->baseName . '.' . $model->fileori->extension;
-                $filename = Yii::getAlias(LogUpload::$imagePath) . $date . $fileLabel . '.' . $model->fileori->extension;
+                $fileOri = Yii::getAlias("@webroot/uploads/") . $model->fileori->baseName . '.' . $model->fileori->extension;
+                $filename = Yii::getAlias("@webroot/uploads/") . $date . $fileLabel . '.' . $model->fileori->extension;
                 $model->fileori->saveAs($filename);
             }
 
-            $params = \sintret\diesel\Util::excelParsing(Yii::getAlias($filename));
+            $params = \sintret\diesel\components\Util::excelParsing($filename);
             $model->params = \yii\helpers\Json::encode($params);
             $model->title = 'parsing ' . $this->baseName;
             $model->fileori = $fileOri;
@@ -402,5 +404,61 @@ if (count($pks) === 1) {
         }
 
         return $this->render('parsing', ['model' => $model, 'logName' => $logName, 'jsonName' => $jsonNameRelative, 'type' => $type]);
+    }
+    
+    public function actionParsingLog($type)
+    {
+        $id = $_POST['id'];
+
+        if ($type == \sintret\diesel\models\LogUpload::ADD_DATA) {
+
+            if ($id) {
+                $d = "<span style='color:red'>";
+                $d .= "wrong excel format, please click at sample link for add! column of id must be removed";
+                $d .= "</span>";
+
+                echo $d;
+                exit(0);
+            }
+            $model = new <?= $modelClass ?>;
+            <?php if($isCreateDate){?>$model->createDate = date('Y-m-d H:i:s');<?php } echo "\n";?>
+            <?php if($isUserCreate){?>$model->userCreate = Yii::$app->user->id;<?php } echo "\n";?>
+            <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } echo "\n";?>
+            
+        } else {
+
+            if (empty($id)) {
+                $d = "<span style='color:red'>";
+                $d .= "wrong excel format, please click at sample link for edit! column of id must be availabled";
+                $d .= "</span>";
+
+                echo $d;
+                exit(0);
+            }
+            $model = <?= $modelClass ?>::find()->one();
+        }
+
+        foreach ($_POST as $k => $v) {
+            $model->$k = $v;
+        }
+
+        <?php if($isUserUpdate){?>$model->userUpdate = Yii::$app->user->id;<?php } echo "\n";?>
+
+        if ($model->save()) {
+            echo "<span style='color:green'>  Success  </span>";
+        } else {
+
+            $e = "<span style='color:red'>";
+            if ($model->getErrors())
+                foreach ($model->getErrors() as $key => $val) {
+                    if ($val)
+                        foreach ($val as $a => $l) {
+                            $e .= $l . "<br>";
+                        }
+                }
+            $e .= "</span>";
+
+            echo $e;
+        }
     }
 }
