@@ -59,8 +59,8 @@ $this->params['breadcrumbs'][] = $this->title;
         $templatesButton .= '{delete} ';
     }
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
-        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . ' Grid</h3>',
+        'before' => '<div style="padding-top: 7px;"><em>* You can customize your own personal grid in the right toolbar button.</em></div>',
     ];
     $columns = [
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
