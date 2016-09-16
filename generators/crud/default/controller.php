@@ -405,6 +405,14 @@ if (count($pks) === 1) {
                 $jsonNameRelative = Yii::getAlias(\sintret\diesel\components\Util::$dirParsingRelative) . $logName . $fileLabel . '.json';
                 //create json file name
                 \sintret\diesel\components\Util::createJson($jsonName, json_encode($json));
+                
+                //save to notification, uncomment for not use this following code
+                $notification = new \app\models\Notification();
+                $notification->userCreate = Yii::$app->user->id;
+                $notification->title = \sintret\diesel\models\LogUpload::$typies_parsing[$model->type] . ' parsing ' . $this->baseName;
+                $notification->message = ' parsing ' . $this->baseName . ' ('.\sintret\diesel\models\LogUpload::$typies_parsing[$model->type].')';
+                $notification->createDate = date("Y-m-d H:i:s");
+                $notification->save();
             }
         }
 
