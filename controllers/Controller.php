@@ -6,19 +6,20 @@ use Yii;
 use yii\web\Controller as WebController;
 use yii\helpers\Url;
 
-
 /**
- * CController base on all access controllers dynamic
+ * Controller base on all access for dynamic controllers
  */
 class Controller extends WebController {
 
     public $user;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
     }
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         $actionId = $action->id;
         $method = strtolower(Yii::$app->controller->id);
         $actionMethod = $method . '.' . $actionId;
@@ -41,8 +42,9 @@ class Controller extends WebController {
         parent::beforeAction($action);
     }
 
-    public function accessMenu($name) {
-        
+    public function accessMenu($name)
+    {
+
         if (Yii::$app->user->id) {
             if (Yii::$app->user->id == -1)
                 return true;
@@ -52,7 +54,8 @@ class Controller extends WebController {
             return false;
     }
 
-    public static function checkAccess($name, $roleId) {
+    public static function checkAccess($name, $roleId)
+    {
 
         $parts = explode(".", $name);
         return \app\models\Access::find()->where([
@@ -61,11 +64,13 @@ class Controller extends WebController {
                     'LOWER(method)' => strtolower($parts[1])])->exists();
     }
 
-    public static function accessTo($name) {
+    public static function accessTo($name)
+    {
         return self::checkAccess($name, Yii::$app->user->identity->roleId);
     }
 
-    public static function checkManyAccess($array, $roleId) {
+    public static function checkManyAccess($array, $roleId)
+    {
         $return = 0;
         if ($array)
             foreach ($array as $v) {
@@ -77,7 +82,8 @@ class Controller extends WebController {
         return $return;
     }
 
-    public static function fieldsArray() {
+    public static function fieldsArray()
+    {
         $fields = \app\models\Role::accessFilter();
 
         $return = [];
@@ -90,7 +96,8 @@ class Controller extends WebController {
         return $return;
     }
 
-    public function accessUser($name) {
+    public function accessUser($name)
+    {
         if (Yii::$app->user->id) {
             $role = \yii\helpers\Json::decode(Yii::$app->user->identity->roles->params);
         } else
