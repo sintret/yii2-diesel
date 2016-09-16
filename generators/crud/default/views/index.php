@@ -183,10 +183,7 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
 <?= "?> " ?>
 </div>
 <?php echo "<?php \n";?>
-$this->registerJs('$(document).on("click", "#backupExcel", function(){
-    var myUrl = "'.yii\helpers\Url::to(['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/excel']).'";
-    location.href=myUrl;
-});$("#deleteSelected").on("click",function(){
+$this->registerJs('$("#deleteSelected").on("click",function(){
 var array = "";
 $(".simple").each(function(index){
     if($(this).prop("checked")){
