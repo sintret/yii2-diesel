@@ -35,26 +35,27 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php endif; ?>    
 
 <?= "<?php \n " ?>
-   $contents_create = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.create') ? Html::a('<i class="glyphicon glyphicon-plus"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/create'], ['type' => 'button', 'title' => 'Add ' . $this->title, 'class' => 'btn btn-success', 'id' => '<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>_btn']) . ' ' : '';
-    $contents_parsing = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.parsing') ? Html::a('<i class="fa fa-file-excel-o"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-warning']) . ' ' : '';
-    $contents_excel = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.excel') ? Html::button('<i class="fa fa-download"></i>', ['type' => 'button', 'title' => 'Excel Backup ' . $this->title, 'class' => 'btn btn-default', 'id' => 'backupExcel']) . ' ' : '';
-    $contents_delete_all = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.delete-all') ? Html::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'button', 'title' => 'Delete Selected ' . $this->title, 'class' => 'btn btn-danger', 'id' => 'deleteSelected']) : '';
+   $contentsCreate = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.create') ? Html::a('<i class="glyphicon glyphicon-plus"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/create'], ['type' => 'button', 'title' => 'Add ' . $this->title, 'class' => 'btn bg-green-active', 'id' => '<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>_btn']) . ' ' : '';
+    $contentsParsing = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.parsing') ? Html::a('<i class="fa fa-cloud-upload"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn  bg-aqua-active']) . ' ' : '';
+    $contentsDeleteAll = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.delete-all') ? Html::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'button', 'title' => 'Delete Selected ' . $this->title, 'class' => 'btn btn-danger', 'id' => 'deleteSelected']) : '';
 
-    $contents = $contents_create . $contents_parsing . $contents_excel . $contents_delete_all .
-            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/index', 'p_reset' => true], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']) . ' ';
+    $contentsAction = $contentsCreate . $contentsParsing . $contentsDeleteAll;
+    $contentsRefresh = Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/index', 'p_reset' => true], ['data-pjax' => 0, 'class' => 'btn bg-purple', 'title' => 'Reset Grid']) . ' ';
+    
     $toolbars = [
-        ['content' => $contents],
+        ['content' => $contentsAction],
+        ['content' => $contentsRefresh],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
         '{export}',
     ];
    $templatesButton = '';
-    if (app\controllers\CController::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.view')) {
+    if (sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.view')) {
         $templatesButton .= '{view} ';
     }
-    if (app\controllers\CController::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.update')) {
+    if (sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.update')) {
         $templatesButton .= '{update} ';
     }
-    if (app\controllers\CController::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.delete')) {
+    if (sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.delete')) {
         $templatesButton .= '{delete} ';
     }
     $panels = [
