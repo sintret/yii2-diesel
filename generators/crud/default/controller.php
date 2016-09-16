@@ -296,7 +296,7 @@ if (count($pks) === 1) {
         /*
         / we store json file at "@webroot/xls_sample"
         */
-        $jsonName = Yii::getAlias(\sintret\diesel\components\Util::$dirSample) . $logSample . $filename . '.json';
+        $jsonName = Yii::getAlias("@webroot/xls_sample/") . $logSample . $filename . '.json';
 
         Yii::$app->session->set($logSample, $jsonName);
 
@@ -307,6 +307,7 @@ if (count($pks) === 1) {
             'info' => 'insert start data in row no.4. Please do not remove in row no.1 & 2'
         ];
 
+        //create file json
        \sintret\diesel\components\Util::createJson($jsonName, json_encode($json));
 
         return $this->redirect('parsing');
@@ -366,12 +367,16 @@ if (count($pks) === 1) {
                 foreach ($params as $k => $v) {
                     foreach ($v as $key => $val) {
                         if ($num == 0) {
-                            $keys[$key] = $val;
-                            $max = $key;
+                            if($val) {
+                                $keys[$key] = $val;
+                                $max = $key;
+                            }
                         }
 
                         if ($num == 1) {
-                            $fields[$key] = $val;
+                            if($val) {
+                                $fields[$key] = $val;
+                            }
                         }
 
                         if ($num >= 3) {
