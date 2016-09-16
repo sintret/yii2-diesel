@@ -109,7 +109,7 @@ $logId = Yii::$app->session->get($log);
     </div>
 </div>
 
-<?php
+<?php echo "<?php\n";?>
 if ($jsonName) {
     $this->registerJsFile(Yii::$app->request->baseUrl . '/js/parsing-process.js', ['depends' => [\app\assets\AppAsset::className()]]);
 }
