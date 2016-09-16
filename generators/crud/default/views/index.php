@@ -141,7 +141,7 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
     $dynagrid = DynaGrid::begin([
                 'id' => 'user-grid',
                 'columns' => $columns,
-                'theme' => 'panel-primary',
+                'theme' => 'panel-default',
                 'showPersonalize' => true,
                 'storage' => 'db',
                 //'maxPageSize' =>500,
