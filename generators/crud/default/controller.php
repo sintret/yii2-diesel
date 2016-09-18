@@ -448,7 +448,15 @@ if (count($pks) === 1) {
                 echo $d;
                 exit(0);
             }
-            $model = <?= $modelClass ?>::find()->one();
+            $model = <?= $modelClass ?>::findOne($id);
+			if (empty($model->id)) {
+                $d = "<span style='color:red'>";
+                $d .= "Please check your colum 'id'. Failed to update data...";
+                $d .= "</span>";
+
+                echo $d;
+                exit(0);
+            }
         }
 
         foreach ($_POST as $k => $v) {
