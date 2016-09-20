@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             
             ?>
-            <?php if($num %2==1) echo "<tr>\n";?><th><?php echo $name;?></th><td><?= "<?= " ?><?php echo $val ; ?>?></td><?php echo "\n";?><?php if($num %2==0 || $num == ($count+2)) echo "</tr> \n";?>
+            <?php if($num %2==1) echo "<tr>\n";?><th><?php echo Inflector::camel2words(StringHelper::basename($name));?></th><td><?= "<?= " ?><?php echo $val ; ?>?></td><?php echo "\n";?><?php if($num %2==0 || $num == ($count+2)) echo "</tr> \n";?>
         <?php $num++;}?>
         </tbody>
     </table>
