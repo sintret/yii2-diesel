@@ -304,7 +304,7 @@ if (count($pks) === 1) {
             'filename' => $this->baseName . '_' . $filename,
             'attributes' => $attributes,
             'models' => $array,
-            'info' => 'insert start data in row no.4. Please do not remove in row no.1 & 2'
+            'info' => 'insert start data in row no.4. Please do not remove data in row no.1 & 2'
         ];
 
         //create file json
