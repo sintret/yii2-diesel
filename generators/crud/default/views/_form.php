@@ -71,7 +71,7 @@ use kartik\widgets\DatePicker;
                     $fields[$l][] =  '<?= $form->field($model, "description")->widget(CKEditor::className(), ["editorOptions" => [ "preset" => "full", "inline" => false]]);?>';
                 }elseif ($type=='date'){
                     $fields[$l][] = '<?=
-            $form->field($model, "release")->widget(DatePicker::classname(), [
+            $form->field($model, "'.$attribute.'")->widget(DatePicker::classname(), [
                 "options" => ["placeholder" => "Enter date ..."],
                 "pluginOptions" => [
                     "autoclose" => true,
