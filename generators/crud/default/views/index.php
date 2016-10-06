@@ -36,8 +36,8 @@ $date = date("YmdHis");
 <?php endif; ?>    
 
 <?= "<?php \n " ?>
-   $contentsCreate = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.create') ? Html::a('<i class="glyphicon glyphicon-plus"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/create'], ['type' => 'button', 'title' => 'Add ' . $this->title, 'class' => 'btn bg-green-active', 'id' => '<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>_btn']) . ' ' : '';
-    $contentsParsing = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.parsing') ? Html::a('<i class="fa fa-cloud-upload"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn  bg-aqua-active']) . ' ' : '';
+   $contentsCreate = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.create') ? Html::a('<i class="glyphicon glyphicon-plus"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/create'], ['type' => 'button', 'title' => 'Add Data' . $this->title, 'class' => 'btn bg-green-active', 'id' => '<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>_btn']) . ' ' : '';
+    $contentsParsing = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.parsing') ? Html::a('<i class="fa fa-cloud-upload"></i>', ['<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>/parsing'], ['type' => 'button', 'title' => 'Import Data with Excel ' . $this->title, 'class' => 'btn  bg-aqua-active']) . ' ' : '';
     $contentsDeleteAll = sintret\diesel\controllers\Controller::accessTo('<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>.delete-all') ? Html::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'button', 'title' => 'Delete Selected ' . $this->title, 'class' => 'btn btn-danger', 'id' => 'deleteSelected']) : '';
 
     $contentsAction = $contentsCreate . $contentsParsing . $contentsDeleteAll;
@@ -46,7 +46,7 @@ $date = date("YmdHis");
     $toolbars = [
         ['content' => $contentsAction],
         ['content' => $contentsRefresh],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+        ['content' => '{dynagrid}'],
         '{export}',
     ];
    $templatesButton = '';
