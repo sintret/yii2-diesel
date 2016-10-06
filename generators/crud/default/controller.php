@@ -320,10 +320,8 @@ if (count($pks) === 1) {
          * this script line for handle a sample excel file
          */
         $sampleLog = $this->baseName . '_' . Yii::$app->user->id;
-
-        //echo Yii::$app->session->get($sampleLog);exit(0);
-
-        if (!empty(Yii::$app->session->get($sampleLog))) {
+        $session = Yii::$app->session->get($sampleLog);
+        if (!empty($session)) {
             return $this->redirect(Url::to(['ajax/sample', 'sessionName' => $sampleLog]));
         }
         /*
