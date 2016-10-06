@@ -30,9 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile(Yii::$app->request->baseUrl . '/js/parsing.js', ['depends' => [\app\assets\AppAsset::className()]]);
 
-//log variable
-$logId = Yii::$app->session->get($log);
-
 /* @var $this yii\web\View */
 /* @var $model app\models\Operator */
 /* @var $form yii\widgets\ActiveForm */

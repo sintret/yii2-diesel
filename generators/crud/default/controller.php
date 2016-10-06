@@ -335,6 +335,8 @@ if (count($pks) === 1) {
         $values = [];
         $attribute = [];
         $jsonName = '';
+        $logName = '';
+        $jsonNameRelative = '';
         $model = new \sintret\diesel\models\LogUpload;
 
         $date = date('Ymdhis') . Yii::$app->user->identity->id;
