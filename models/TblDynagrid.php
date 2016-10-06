@@ -54,7 +54,7 @@ class TblDynagrid extends \yii\db\ActiveRecord {
         }
 
         $model = static::find()->where(['id' => $id])->one();
-        if ($model->id) {
+        if ($model != NULL) {
             $data = $model->data;
             $encode = json_decode($data, true);
             $page = $encode['page'];
