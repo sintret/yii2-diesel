@@ -73,7 +73,7 @@ if ($isImage) {
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
  */
-class <?= $controllerClass ?> extends \sintret\diesel\controllers\Controller <?php echo "\n";?> <?php  // echo StringHelper::basename($generator->baseControllerClass) . "\n" ?>
+class <?= $controllerClass ?> extends BaseController <?php echo "\n";?> <?php  // echo StringHelper::basename($generator->baseControllerClass) . "\n" ?>
 {
 
     /**
